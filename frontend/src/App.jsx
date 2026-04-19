@@ -1,19 +1,50 @@
 import { Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import Forgot from "./pages/Forgot";
-import Reset from "./pages/Reset";
+
+import Login from "./components/Login";
+import Register from "./components/Register";
+import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
+import Dashboard from "./components/Dashboard";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/forgot" element={<Forgot />} />
-      <Route path="/reset/:token" element={<Reset />} />
+
+      {/* PUBLIC */}
+      <Route
+        path="/"
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/register"
+        element={
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        }
+      />
+
+      <Route path="/forgot" element={<ForgotPassword />} />
+      <Route path="/reset" element={<ResetPassword />} />
+
+      {/* PROTECTED */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
     </Routes>
   );
 }

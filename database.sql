@@ -1,21 +1,27 @@
-CREATE DATABASE mern_auth_db;
-
+CREATE DATABASE IF NOT EXISTS mern_auth_db;
 USE mern_auth_db;
 
+-- USERS
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(100),
-  email VARCHAR(100),
-  phone VARCHAR(15),
-  password VARCHAR(255)
-);
-
-CREATE TABLE items (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT,
-  title VARCHAR(255),
-  description TEXT,
-  status VARCHAR(20) DEFAULT 'active',
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  phone VARCHAR(20),
+  password VARCHAR(255) NOT NULL,
+  reset_token VARCHAR(255),
+  reset_token_expiry DATETIME,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- ITEMS
+CREATE TABLE items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  status ENUM('active','pending','completed') DEFAULT 'active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
